@@ -1,0 +1,84 @@
+<!-- templates/user.html -->
+
+{% extends "base.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="title">
+            Welcome, admin {{ name }}!
+        </h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert-danger">
+                    {{ messages[0] }}.
+                </div>
+            {% endif %}
+        {% endwith %}
+        <table class="table table-boarded table-striped">
+
+            <thead>
+            <tr>
+                <th scope="col">
+                    Name
+                </th>
+                <th scope="col">
+                    Role
+                </th>
+                <th scope="col">
+                    Points
+                </th>
+                <th scope="col">
+                    Give points
+                </th>
+                <th scope="col">
+                    Change status
+                </th>
+            </tr>
+            </thead>
+            <!-- For loop logic of jinja template -->
+            <tbody>
+            {% for i in range(0, len) %}
+
+                <tr>
+                    <th scope="row">
+                        {{ users[i].name }}
+                    </th>
+                    {% if users[i].role.name == 'admin' %}
+                        <th>
+                            admin
+                        </th>
+                        <th colspan="2"></th>
+                        <th>
+                            <form method="POST" action="/make_user">
+                                <button name="id" value="{{ users[i].id }}">
+                                    Make user
+                                </button>
+                            </form>
+                        </th>
+                    {% else %}
+                        <th>
+                            user
+                        </th>
+                        <th>
+                            {{ users[i].points }}
+                        </th>
+                        <th>
+                            <form method="POST" action="/give_points">
+                                <input type="hidden" name="id" value="{{ users[i].id }}">
+                                <input type="number" name="points">
+                            </form>
+
+                        </th>
+                        <th>
+                            <form method="POST" action="/make_admin">
+                                <button name="id" value="{{ users[i].id }}">
+                                    Make admin
+                                </button>
+                            </form>
+                        </th>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

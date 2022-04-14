@@ -1,0 +1,26 @@
+<!-- templates/user.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">
+        Welcome, user {{ name }}!
+    </h1>
+    You have {{ points }} points.
+    Your color is : <img src="{{ url_for('static',filename='/img/'+ id + '_user_img.jpg') }}">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <div>
+        <form method="POST" action="/ocupy">
+            <input type="number" name="x">
+            <input type="number" name="y">
+            <button>Submit</button>
+        </form>
+    </div>
+    <img src="{{ url_for('main.plot_png') }}">
+{% endblock %}

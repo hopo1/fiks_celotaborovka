@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>
+        Standings
+    </h1>
+    Table is updated after evaluation.
+    <table class="table table-boarded table-striped">
+        <thead>
+        <tr>
+            <th scope="col">
+                Standing
+            </th>
+            <th scope="col">
+                Name
+            </th>
+            <th scope="col">
+                Occupied territories
+            </th>
+        </tr>
+        </thead>
+        <!-- For loop logic of jinja template -->
+        <tbody>
+        {% for i in range(0, len) %}
+
+            <tr>
+                <th scope="row">
+                    {{ i + 1 }}
+                </th>
+                <th scope="row">
+                    {{ players[i][0] }}
+                </th>
+                <th scope="row">
+                    {{ players[i][1] }}
+                </th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

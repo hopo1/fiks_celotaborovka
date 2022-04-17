@@ -2,6 +2,7 @@
 
 from flask_login import UserMixin
 from sqlalchemy import ForeignKey, func
+from sqlalchemy.orm import relationship
 
 from . import db
 from project.enums import Roles
@@ -18,9 +19,10 @@ class User(UserMixin, db.Model):
 class Tile(db.Model):
     x = db.Column(db.Integer, primary_key=True)
     y = db.Column(db.Integer, primary_key=True)
-    player = db.Column(ForeignKey('user.id'))
+    player_id = db.Column(ForeignKey('user.id'))
     sub = db.Column(db.TIMESTAMP, default=func.now())
     solved = db.Column(db.Boolean, default=False)
+    player = relationship("User", foreign_keys=[player_id])
 
 
 class Range(db.Model):

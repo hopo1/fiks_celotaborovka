@@ -16,12 +16,19 @@
 <section class="container-fluid">
 
     <nav class="navbar navbar-light">
-        <a href="{{ url_for('main.index') }}" class="navbar-item">
-            Home
-        </a>
+
         {% if current_user.is_authenticated %}
             <a href="{{ url_for('main.profile') }}" class="navbar-item">
-                Profile
+                Game
+            </a>
+            <a href="{{ url_for('main.results') }}" class="navbar-item">
+                Standings
+            </a>
+        {% endif %}
+
+        {% if current_user.is_authenticated and current_user.role.name == 'admin' %}
+            <a href="{{ url_for('main.admin') }}" class="navbar-item">
+                Admin page
             </a>
         {% endif %}
         {% if not current_user.is_authenticated %}

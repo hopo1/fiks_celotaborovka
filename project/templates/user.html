@@ -4,10 +4,8 @@
 
 {% block content %}
     <h1 class="title">
-        Welcome, user {{ name }}!
+        Game board
     </h1>
-    You have {{ points }} points.
-    Your color is : <img src="{{ url_for('static',filename='/img/'+ id + '_user_img.jpg') }}">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="alert-danger">
@@ -15,12 +13,18 @@
             </div>
         {% endif %}
     {% endwith %}
-    <div>
+    {% if current_user.role.name == 'user' %}
+        You have {{ points }} points.
+        Your color is : <img src="{{ url_for('static',filename='/img/'+ id + '_user_img.jpg') }}">
+        <div>
+
         <form method="POST" action="/ocupy">
             <input type="number" name="x">
             <input type="number" name="y">
             <button>Submit</button>
         </form>
-    </div>
+    {% endif %}
+
+</div>
     <img src="{{ url_for('main.plot_png') }}">
 {% endblock %}

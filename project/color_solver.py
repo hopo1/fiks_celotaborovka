@@ -33,10 +33,10 @@ def make_new_color(id):
 
 def get_colors():
     r = Color.query.filter(Color.user_id.isnot(None)).order_by(Color.user_id.asc()).all()
-    return [black,white] + [toRgb(x) for x in r]
+    return [black, white] + [toRgb01(x) for x in r]
 
 
-def get_color(id):
+def get_color(id):  # unused
     r = Color.query.filter_by(user_id=id).first()
     if r is None:
         return None
@@ -49,3 +49,7 @@ def get_color(id):
 
 def toRgb(color):
     return int(color.x * 255), int(color.y * 255), int(color.z * 255)
+
+
+def toRgb01(color):
+    return color.x, color.y, color.z

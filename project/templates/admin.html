@@ -4,7 +4,7 @@
 {% block content %}
     <div class="container-fluid">
         <h1 class="title">
-            Welcome, admin {{ name }}!
+            Admin menu
         </h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -13,6 +13,28 @@
                 </div>
             {% endif %}
         {% endwith %}
+        <div class="row">
+            <div class="col-6">
+                <div>
+                    <div class="row">
+                        <form method="POST" action="/range">
+                            <input name="min_x" class="col" type="number" placeholder="min X: {{ rn.min_x }}">
+                            <input name="max_x" class="col" type="number" placeholder="max X: {{ rn.max_x }}">
+                            <input name="min_y" class="col" type="number" placeholder="min Y: {{ rn.min_y }}">
+                            <input name="max_y" class="col" type="number" placeholder="max Y: {{ rn.max_y }}">
+                            <button>Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <form method="POST" action="/evaluate">
+                    <button>
+                        Evaluate
+                    </button>
+                </form>
+            </div>
+        </div>
         <table class="table table-boarded table-striped">
 
             <thead>

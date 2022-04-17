@@ -1,0 +1,9 @@
+numpy
+matplotlib
+flask
+flask_sqlalchemy
+flask_login
+flask_caching
+flask_bootstrap
+Pillow
+distinctipy

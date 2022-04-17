@@ -6,8 +6,7 @@ from flask_login import login_required, current_user
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
-from sqlalchemy import tuple_, func, text
+from sqlalchemy import tuple_, func
 from sqlalchemy.exc import IntegrityError
 import numpy as np
 

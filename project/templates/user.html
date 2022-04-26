@@ -15,7 +15,7 @@
     {% endwith %}
     {% if current_user.role.name == 'user' %}
         You have {{ points }} points.
-        Your color is : <img src="{{ url_for('static',filename='/img/'+ id + '_user_img.jpg') }}">
+        Your color is : <img src="{{ url_for('static',filename='img/'+ id + '_user_img.jpg') }}">
         <div>
 
         <form method="POST" action="/ocupy">

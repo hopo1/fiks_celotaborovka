@@ -132,7 +132,7 @@ def give_points():
 @login_required
 @cache.memoize(0)
 def plot_png():  # todo split cache for array and painting if neccesery
-    fig = Figure()
+    fig = Figure(figsize=(10, 10))
     ax = fig.add_subplot(1, 1, 1)
     cl = get_colors()
     cmap = ListedColormap(cl)
@@ -202,7 +202,7 @@ def evaluate():  # todo test and add a timer
                 i.y - rn.min_y]:
                 sur = is_surrounded(arr, px, py, rn)
                 if sur:
-                    db.session.query(Tile).filter(tuple_(Tile.x, Tile.y).in_(sur)).update({'player': i.player_id})
+                    db.session.query(Tile).filter(tuple_(Tile.x, Tile.y).in_(sur)).update({'player_id': i.player_id})
                     for c, d in sur:
                         arr[c - rn.min_x][d - rn.min_y] = i.player_id
         i.solved = True
@@ -226,10 +226,11 @@ def get_range():
 
 @cache.memoize(timeout=0)
 def get_occupied():
-    pts = Tile.query.with_entities(Tile.player_id, func.count(Tile.player_id).label('pts')).all()
+    pts = Tile.query.with_entities(Tile.player_id, func.count(Tile.player_id).label('pts')).group_by(
+        Tile.player_id).all()
     nm = {x.player_id: x.pts for x in pts}
     us = User.query.filter_by(role=Roles.user).all()
-    return sorted([(x.name, nm.get(x.id, 0)) for x in us], key=lambda x: x[1])
+    return sorted([(x.name, nm.get(x.id, 0)) for x in us], key=lambda x: x[1],reverse=True)
 
 
 def not_inside(rn, x, y):

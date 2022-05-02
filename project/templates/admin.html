@@ -54,6 +54,12 @@
                 <th scope="col">
                     Change status
                 </th>
+                <th scope="col">
+                    Delete
+                </th>
+                <th scope="col">
+                    Reset passwd
+                </th>
             </tr>
             </thead>
             <!-- For loop logic of jinja template -->
@@ -98,6 +104,18 @@
                             </form>
                         </th>
                     {% endif %}
+                    <th>
+                        <form method="POST" action="/rm_user">
+                            <button name="user_id" value="{{ users[i].id }}">
+                                Delete user
+                            </button>
+                        </form>
+                    </th>
+                <th>
+                    <a href="{{ url_for('main.reset',id=users[i].id) }}">
+                        Reset passwd
+                    </a>
+                </th>
                 </tr>
             {% endfor %}
             </tbody>

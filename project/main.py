@@ -9,6 +9,7 @@ from matplotlib.figure import Figure
 from sqlalchemy import tuple_, func
 from sqlalchemy.exc import IntegrityError
 import numpy as np
+from werkzeug.security import generate_password_hash
 
 from .color_solver import get_colors
 from .models import User, Range, Tile
@@ -219,6 +220,44 @@ def results():
     return render_template('standings.html', len=len(pts), players=pts)
 
 
+@main.route("/rm_user", methods=['POST'])
+@login_required
+def remove_user():
+    if current_user.role != Roles.admin:
+        return redirect(url_for('main.profile'))
+    try:
+        id = int(request.form.get("user_id"))
+    except Exception:
+        return redirect(url_for('main.profile'))
+    u = User.query.get(id)
+    if u.role == Roles.admin:
+        flash("Can't delete admin")
+        return redirect(url_for("main.admin"))
+    db.session.delete(u)
+    db.session.commit()
+    return redirect(url_for("main.admin"))
+
+
+@main.route("/reset_pass/<id>")
+def reset(id):
+    u = User.query.filter_by(id=id).first()
+    return render_template("reset.html", id=id, username=u.name)
+
+
+@main.route("/new_pass/<id>", methods=['POST'])
+def set_passwd(id):
+    u = User.query.filter_by(id=id).first()
+    p1 = request.form.get("pass1")
+    p2 = request.form.get("pass2")
+    if p1 is None or p1 != p2 or len(p1) < 3:
+        flash("Bad password")
+        return redirect(url_for("main.reset", id=id))
+    u.password = generate_password_hash(p1, method='sha256')
+    db.session.add(u)
+    db.session.commit()
+    return redirect(url_for("main.admin"))
+
+
 @cache.memoize(timeout=0)
 def get_range():
     return Range.query.order_by(Range.id.desc()).first()
@@ -226,11 +265,11 @@ def get_range():
 
 @cache.memoize(timeout=0)
 def get_occupied():
-    pts = Tile.query.with_entities(Tile.player_id, func.count(Tile.player_id).label('pts')).group_by(
+    pts = Tile.query.filter_by(solved=True).with_entities(Tile.player_id, func.count(Tile.player_id).label('pts')).group_by(
         Tile.player_id).all()
     nm = {x.player_id: x.pts for x in pts}
     us = User.query.filter_by(role=Roles.user).all()
-    return sorted([(x.name, nm.get(x.id, 0)) for x in us], key=lambda x: x[1],reverse=True)
+    return sorted([(x.name, nm.get(x.id, 0), str(x.id)) for x in us], key=lambda x: x[1], reverse=True)
 
 
 def not_inside(rn, x, y):

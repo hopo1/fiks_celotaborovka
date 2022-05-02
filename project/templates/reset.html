@@ -1,0 +1,12 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Reset password for user {{ username }} </h1>
+    <form method="POST" action="{{ "/new_pass/" + id }}">
+        <input type="text" name="pass1">
+        <input type="text" name="pass2">
+        <button>Submit</button>
+    </form>
+{% endblock %}
